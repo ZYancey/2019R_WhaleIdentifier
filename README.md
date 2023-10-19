@@ -1,14 +1,15 @@
 ### 201R Group Project
+
 # Cetacean Species Identification using Machine Learning
 
 ![Cetacean Image](https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Whale_breaching_in_Alaska_2016-07-04.jpg/1024px-Whale_breaching_in_Alaska_2016-07-04.jpg)
 
 ## Table of Contents
 
-- [Description]("placeholder")
-- [Data]("placeholder")
-- [Methodology]("placeholder")
-- [License](LICENSE.md)
+- [Description](https://github.com/ZYancey/201R_WhaleIdentifier#description)
+- [Data](https://github.com/ZYancey/201R_WhaleIdentifier#data)
+- [Methodology](https://github.com/ZYancey/201R_WhaleIdentifier#methodology)
+- [License](LICENSE)
 
 ## Description
 
@@ -19,6 +20,3 @@ Whales, dolphins, porpoises, and other cetaceans are renowned for their social n
 The data for this project is sourced from the [Watkins Marine Mammal Sound Database](https://whoicf2.whoi.edu/science/B/whalesounds/index.cfm). It consists of audio clips associated with 32 different species of cetaceans, with approximately 15,000 sound cuts, of which 1,694 files are considered the 'best cuts'. Each audio clip is about 2 to 15 seconds long and is available in waveform audio file format. The data is freely available for academic use.
 
 ## Methodology
-
-We use the Mel Frequency Cepstral Coefficient (MFCC) algorithm to extract numerical features from the audio files. These features represent various qualities of the audio, including loudness, perceived pitch, timbre, texture, dynamics, and energy. MFCC has been used since the 1980s to convert frequency and time characteristics into numerical features. The number of features used can be customized based on your needs.
-
