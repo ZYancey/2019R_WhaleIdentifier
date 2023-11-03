@@ -5,13 +5,13 @@ import pandas as pd
 
 
 # Function to extract MFCC features from an audio file
-def extract_mfcc_features(file_path, n_mfcc=10):
+def extract_mfcc_features(file_path, n_mfcc=40):
     audio_data, sampling_rate = librosa.load(file_path)
     mfccs = librosa.feature.mfcc(y=audio_data, sr=sampling_rate, n_mfcc=n_mfcc, n_mels=n_mfcc)
     return mfccs.T  # Transpose to have features in columns
 
 
-def process_audio_files(directory, output_csv, n_mfcc=10):
+def process_audio_files(directory, output_csv, n_mfcc=40):
     data = {'species': []}
     for i in range(n_mfcc):
         data[f'mfcc_{i}'] = []
