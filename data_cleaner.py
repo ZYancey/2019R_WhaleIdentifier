@@ -3,7 +3,6 @@ import shutil
 from pydub import AudioSegment
 from pydub.exceptions import CouldntDecodeError
 
-
 # Function to remove folders containing "seal" in the Data_Processed directory
 def remove_seal_folders(data_processed_dir, kill_seals):
     if kill_seals.lower() == 'n':
