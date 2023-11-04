@@ -23,7 +23,7 @@ clf = MLPClassifier(hidden_layer_sizes = [64],
                     n_iter_no_change = 10)
 
 
-X = whale_df[['mfcc_0', 'mfcc_1', 'mfcc_2', 'mfcc_3', 'mfcc_4', 'mfcc_5', 'mfcc_6', 'mfcc_7', 'mfcc_8', 'mfcc_9']]
+X = whale_df.drop(columns='species')
 y = whale_df[['species']]
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, train_size=0.8)

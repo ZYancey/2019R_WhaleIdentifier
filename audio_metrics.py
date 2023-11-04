@@ -14,7 +14,10 @@ def get_audio_duration(file_path):
 def collect_audio_duration_data(root_folder):
     data = []
     filecount = 0
+    pre_count = 0
     for foldername, subfolders, filenames in os.walk(root_folder):
+        print(foldername)
+        pre_count = filecount
         for filename in filenames:
             if filename.endswith(('.mp3', '.wav', '.ogg', '.flac', '.aac')):
                 filecount = filecount + 1
@@ -22,6 +25,7 @@ def collect_audio_duration_data(root_folder):
                 duration = get_audio_duration(file_path)
                 foldernameWrite = foldername.replace(root_folder, "")
                 data.append((foldernameWrite, filename, duration))
+        print(filecount - pre_count)
     print(filecount)
     return data
 
