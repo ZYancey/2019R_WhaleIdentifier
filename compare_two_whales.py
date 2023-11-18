@@ -72,13 +72,25 @@ filtered_df = whale_df[whale_df['species'].isin(all_whales)]
 X = filtered_df.drop(columns='species')
 y = filtered_df[['species']]
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, train_size=0.8)
-clf.fit(X_train, np.ravel(y_train))
+train_acc = []
+test_acc = []
+for _ in range(20):
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, train_size=0.8)
+    clf = RandomForestClassifier(n_estimators=100)
+    clf.fit(X_train, np.ravel(y_train))
 
-y_pred = clf.predict(X_train)
-train_accuracy = accuracy_score(y_train, y_pred)
-print(f'The Training set accuracy is: {train_accuracy}.')
+    y_pred = clf.predict(X_train)
+    train_accuracy = accuracy_score(y_train, y_pred)
+    train_acc.append(train_accuracy)
+    #print(f'The Training set accuracy is: {train_accuracy}.') 
 
-y_pred = clf.predict(X_test)
-test_accuracy = accuracy_score(y_test, y_pred)
-print(f'The Test set accuracy is: {test_accuracy}.')
+    y_pred = clf.predict(X_test)
+    test_accuracy = accuracy_score(y_test, y_pred)
+    test_acc.append(test_accuracy)
+    #print(f'The Test set accuracy is: {test_accuracy}.') 
+
+print(train_acc)
+print(test_acc)
+
+print(np.mean(train_acc)) # 1.0
+print(np.mean(test_acc))  # 0.58
