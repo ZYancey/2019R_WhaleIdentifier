@@ -2,6 +2,8 @@ import os
 import shutil
 from pydub import AudioSegment
 from pydub.exceptions import CouldntDecodeError
+import noisereduce as nr
+from scipy.io import wavfile
 
 # Function to remove folders containing "seal" in the Data_Processed directory
 def remove_seal_folders(data_processed_dir, kill_seals):
@@ -69,6 +71,21 @@ def remove_subfolders_below_threshold(directory, min_length):
                 f"Folder {root} has length of {total_length / 1000} seconds and does not meet threshold of {min_length}")
             shutil.rmtree(root)
 
+def apply_noisegate(directory, gate_noise):
+    if gate_noise.lower() == 'n':
+        return
+    for root, dirs, files in os.walk(directory, topdown=False):
+        for file in files:
+            if file.endswith(".wav"):
+                file_path = os.path.join(root, file)
+                try:
+                    print("Working on " + file_path)
+                    rate, data = wavfile.read(file_path)
+                    reduced_noise = nr.reduce_noise(y=data, sr=rate, time_mask_smooth_ms=427, n_std_thresh_stationary=0.75, stationary=True)
+                    wavfile.write(file_path, rate, reduced_noise)
+                except ValueError:
+                    print(f"Could not decode {file_path}. Skipping.")
+
 
 def main():
     data_dir = "Data"
@@ -97,6 +114,10 @@ def main():
     # Operation 4: Remove subfolders if total length is below a threshold
     min_folder_length = float(input("Enter the minimum sub-folder length in seconds (default 60): ") or 60)
     remove_subfolders_below_threshold(data_processed_dir, min_folder_length)
+
+    # Operation 5: Apply noisegate
+    gate_noise = str(input("Apply noisegating (Y/N)? (default Y): ") or 'y')
+    apply_noisegate(data_processed_dir, gate_noise)
 
 
 if __name__ == "__main__":
