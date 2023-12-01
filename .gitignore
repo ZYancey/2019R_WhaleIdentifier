@@ -162,6 +162,6 @@ cython_debug/
 
 
 .DS_Store
-/mfcc_features.csv
-/features.csv
 /compare_two_whales.csv
+/mywav_reduced_noise.wav
+/PinkPanther.wav
