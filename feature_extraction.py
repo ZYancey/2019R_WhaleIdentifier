@@ -59,10 +59,15 @@ def extract_additional_features(file_path, feature_types=[]):
         rmse = librosa.feature.rms(y=audio_data)
         features['rmse'] = np.mean(rmse)
 
+    if 'tempo'in feature_types:
+        onset_env = librosa.onset.onset_strength(y=audio_data, sr=sampling_rate)
+        tempo, _ = librosa.beat.beat_track(onset_envelope=onset_env, sr=sampling_rate)
+        features['tempo'] = tempo
+
     return features
 
 
-def process_audio_files(directory, output_csv, n_mfcc=40, additional_features=[]):
+def process_audio_files(directory, output_csv, n_mfcc=40, additional_features=[], normalize_columns=False):
     data = {'species': []}
     for i in range(n_mfcc):
         data[f'mfcc_{i}'] = []
@@ -98,6 +103,10 @@ def process_audio_files(directory, output_csv, n_mfcc=40, additional_features=[]
                 for feature_type in additional_features:
                     data[feature_type].append(np.mean(additional_features_dict[feature_type]))
 
+    if normalize_columns:
+        for feature_type in additional_features:
+            data[feature_type] = librosa.util.normalize(data[feature_type], axis=0)
+
     df = pd.DataFrame(data)
     df.to_csv(output_csv, index=False)
 
@@ -111,10 +120,12 @@ def main():
                            'spectral_centroid',
                            'spectral_rolloff',
                            'zero_crossing_rate',
-                           'rmse'
+                           'rmse',
+                           'tempo'
                            ]
+    normalize_columns = True
 
-    process_audio_files(data_processed_dir, output_csv, n_mfcc, additional_features)
+    process_audio_files(data_processed_dir, output_csv, n_mfcc, additional_features, normalize_columns)
     print(f"Features saved to {output_csv}")
 
 

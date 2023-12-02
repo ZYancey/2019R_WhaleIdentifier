@@ -162,7 +162,4 @@ cython_debug/
 
 
 .DS_Store
-/mfcc_features.csv
-/features.csv
 /compare_two_whales.csv
-/compare_two_whales_1.csv
