@@ -64,3 +64,9 @@ print(f"Accuracy whales vs dolphines: {accuracy:.2f}")  # 0.65, 0.69
 
 
 # the function for the random forest classifier 
+def run_random_forest(input_file_path, output_model_path):
+    # run random forest on a specific dataset 
+
+    # output the persitant model 
+
+    pass
