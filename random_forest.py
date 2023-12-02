@@ -4,7 +4,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
-file_path = 'mfcc_features.csv'
+file_path = 'features.csv'
 
 whale_df = pd.read_csv(file_path)
 
@@ -20,7 +20,7 @@ clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
 
 accuracy = accuracy_score(y_test, y_pred)
-print(f"Accuracy: {accuracy:.2f}")  # 0.36
+print(f"Accuracy of just whales: {accuracy:.2f}")  # 0.36
 
 # Filtering the data down to two types of whales
 filtered_df = whale_df[whale_df['species'].isin(['atlantic_spotted_dolphin', 'whitesided_dolphin'])]
@@ -60,4 +60,7 @@ clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
 
 accuracy = accuracy_score(y_test, y_pred)
-print(f"Accuracy: {accuracy:.2f}")  # 0.65, 0.69
+print(f"Accuracy whales vs dolphines: {accuracy:.2f}")  # 0.65, 0.69
+
+
+# the function for the random forest classifier 
