@@ -15,7 +15,7 @@ import os
 
 # Run all the models on the same train_test_split 
 
-def run_all_models():
+def run_all_models(with_dolphines = True):
 
     models = []
     
@@ -71,8 +71,22 @@ def run_all_models():
 
     data = []
     for filenames in os.listdir('Datasets'):
+        if with_dolphines:
+            model_folder = 'Models_with_Dolphines/'
+        else:
+            model_folder = 'Models_only_whales/'
+
+
         name = 'Datasets/' + filenames
         whale_df = pd.read_csv(name)
+        if not with_dolphines:
+            # Limit the dataset to just whale exclude dolphins 
+            all_whales = []
+            for whale in whale_df['species'].unique():
+                if "whal" in whale:
+                    all_whales.append(whale)
+            whale_df = whale_df[whale_df['species'].isin(all_whales)]
+
         X = whale_df.drop(columns='species')
         y = whale_df[['species']]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, train_size=0.9)
@@ -82,7 +96,7 @@ def run_all_models():
             model = models[i]
             model.fit(X_train, y_train)
 
-            model_filename = 'Models/' + model_names[i] + filenames.split('.')[0] + '.pkl'
+            model_filename = model_folder + model_names[i] + filenames.split('.')[0] + '.pkl'
             with open(model_filename, 'wb+') as model_file:
                 s = pickle.dump(model, model_file)
                 #pickle.loads(s)
@@ -96,8 +110,12 @@ def run_all_models():
             data.append(row)
 
     data_df = pd.DataFrame(data, columns=['Model', 'Dataset', 'Training Accuracy', 'Test Accuracy'])
-    data_df.to_csv("final_results.csv", index=False)
+    if with_dolphines:
+        results_file_name = "final_results_with_dolphines.csv"
+    else:
+        results_file_name = "final_results_only_whales.csv"
+    data_df.to_csv(results_file_name, index=False)
 
 
-
-run_all_models()
+run_all_models(with_dolphines=True)
+run_all_models(with_dolphines=False)
