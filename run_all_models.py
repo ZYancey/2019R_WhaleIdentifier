@@ -109,7 +109,7 @@ def run_all_models(with_dolphines = True):
             row = [model_names[i], filenames.split('.')[0], train_acc, test_acc]
             data.append(row)
 
-    data_df = pd.DataFrame(data, columns=['Model', 'Dataset', 'Training Accuracy', 'Test Accuracy'])
+    data_df = pd.DataFrame(data, columns=['Model', 'Dataset', 'Training_Accuracy', 'Test_Accuracy'])
     if with_dolphines:
         results_file_name = "final_results_with_dolphines.csv"
     else:

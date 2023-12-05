@@ -1,4 +1,4 @@
-Model,Dataset,Training Accuracy,Test Accuracy
+Model,Dataset,Training_Accuracy,Test_Accuracy
 Perceptron,fulldata_normalized,0.443163097199341,0.39705882352941174
 MLP,fulldata_normalized,0.8105436573311368,0.5588235294117647
 SVM,fulldata_normalized,0.6062602965403624,0.45588235294117646
