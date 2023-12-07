@@ -71,7 +71,7 @@ def run_all_models(cetacean_type = 'both'):
         if cetacean_type == 'both':
             model_folder = 'Models_both/'
         elif cetacean_type == 'whale_vs_dolphins':
-            model_folder = 'Models_whale_vs_dolphins'
+            model_folder = 'Models_whale_vs_dolphins/'
         elif cetacean_type == 'only_whales':
             model_folder = 'Models_only_whales/'
         elif cetacean_type == 'only_dolphins':
