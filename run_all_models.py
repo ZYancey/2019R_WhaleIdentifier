@@ -12,11 +12,8 @@ from sklearn.model_selection import train_test_split
 import pickle
 import os
 
-
-# Run all the models on the same train_test_split 
-
-def run_all_models(with_dolphines = True):
-
+def define_all_models():
+    # define all models 
     models = []
     
     # simple perceptron
@@ -52,54 +49,66 @@ def run_all_models(with_dolphines = True):
                                  class_weight="balanced")
     models.append(decision_tree_clf)
 
-    # # kmeans 
-    # kmeans_clf = KMeans(n_clusters=3, init='random', n_init=1)
-    # models.append(kmeans_clf)
-    
-    # #HAC 
-    # hac_clf = AgglomerativeClustering(n_clusters=3, linkage='complete')
-    # models.append(hac_clf)
-
-    # Ensembles 
-    # random forest 
+    # random forest (ensemble)
     random_forest_clf = RandomForestClassifier(n_estimators=100)
     models.append(random_forest_clf)
 
-    # gradient boost 
+    # gradient boost (ensemble)
     gradient_boost_clf = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1, max_depth=3)
     models.append(gradient_boost_clf)
 
+    return models 
+
+# Run all the models on the same train_test_split 
+#cetacean_type = ('both', 'whale_vs_dolphins', 'only_whales', 'only_dolphins')
+def run_all_models(cetacean_type = 'both'):
+
+    models = define_all_models()
+
     data = []
     for filenames in os.listdir('Datasets'):
-        if with_dolphines:
-            model_folder = 'Models_with_Dolphines/'
-        else:
+        # cetacean_type = ('both', 'whale_vs_dolphins', 'only_whales', 'only_dolphins')
+        if cetacean_type == 'both':
+            model_folder = 'Models_both/'
+        elif cetacean_type == 'whale_vs_dolphins':
+            model_folder = 'Models_whale_vs_dolphins'
+        elif cetacean_type == 'only_whales':
             model_folder = 'Models_only_whales/'
-
+        elif cetacean_type == 'only_dolphins':
+            model_folder = 'Models_only_dolphins/'
 
         name = 'Datasets/' + filenames
         whale_df = pd.read_csv(name)
-        if not with_dolphines:
-            # Limit the dataset to just whale exclude dolphins 
+        if cetacean_type == 'only_whales':
+            # Limit the dataset to just whales, exclude dolphins 
             all_whales = []
             for whale in whale_df['species'].unique():
                 if "whal" in whale:
                     all_whales.append(whale)
             whale_df = whale_df[whale_df['species'].isin(all_whales)]
+            print(all_whales)
+        elif cetacean_type == 'only_dolphins':
+            all_dolphins = []
+            for cetacean in whale_df['species'].unique():
+                if not "whal" in cetacean:
+                    all_dolphins.append(cetacean)
+            whale_df = whale_df[whale_df['species'].isin(all_dolphins)]
+        elif cetacean_type == 'whale_vs_dolphins':
+            # Assign all whales to class 1 and all dolphines to class 0. 
+            whale_df['species'] = whale_df['species'].str.contains('whale').astype(int)
 
         X = whale_df.drop(columns='species')
         y = whale_df[['species']]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, train_size=0.9)
         
-        model_names = ['Perceptron', 'MLP', 'SVM', 'KNN', 'Decision Tree', 'Random Forest', 'Gradient Boost']
+        model_names = ['Perceptron', 'MLP', 'SVM', 'KNN', 'Decision_Tree', 'Random_Forest', 'Gradient_Boost']
         for i in range(len(models)): 
             model = models[i]
             model.fit(X_train, y_train)
 
-            model_filename = model_folder + model_names[i] + filenames.split('.')[0] + '.pkl'
+            model_filename = 'Models/' + model_folder + model_names[i] + "_" + filenames.split('.')[0] + '.pkl'
             with open(model_filename, 'wb+') as model_file:
                 s = pickle.dump(model, model_file)
-                #pickle.loads(s)
 
             # get our train and test accuracy write to a csv file
             train_acc = model.score(X_train, y_train)
@@ -110,12 +119,20 @@ def run_all_models(with_dolphines = True):
             data.append(row)
 
     data_df = pd.DataFrame(data, columns=['Model', 'Dataset', 'Training_Accuracy', 'Test_Accuracy'])
-    if with_dolphines:
-        results_file_name = "final_results_with_dolphines.csv"
-    else:
-        results_file_name = "final_results_only_whales.csv"
+    # cetacean_type = ('both', 'whale_vs_dolphins', 'only_whales', 'only_dolphins')
+    if cetacean_type == 'both':
+        results_file_name = "final_results/final_results_both.csv"
+    elif cetacean_type == 'whale_vs_dolphins':
+        results_file_name = "final_results/final_results_whale_vs_dolphins.csv"
+    elif cetacean_type == 'only_whales':
+        results_file_name = "final_results/final_results_only_whales.csv"
+    elif cetacean_type == 'only_dolphins':
+        results_file_name = "final_results/final_results_only_dolphins.csv"
+
     data_df.to_csv(results_file_name, index=False)
 
 
-run_all_models(with_dolphines=True)
-run_all_models(with_dolphines=False)
+run_all_models(cetacean_type = 'both')
+run_all_models(cetacean_type = 'whale_vs_dolphins')
+run_all_models(cetacean_type = 'only_whales')
+run_all_models(cetacean_type = 'only_dolphins')
