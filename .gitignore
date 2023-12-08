@@ -166,3 +166,7 @@ cython_debug/
 /compare_two_whales_1.csv
 /features.csv
 /mfcc_features.csv
+
+
+ffmpeg-6.1/*
+
