@@ -132,7 +132,7 @@ def run_all_models(cetacean_type = 'both'):
     data_df.to_csv(results_file_name, index=False)
 
 
-run_all_models(cetacean_type = 'both')
-run_all_models(cetacean_type = 'whale_vs_dolphins')
+#run_all_models(cetacean_type = 'both')
+#run_all_models(cetacean_type = 'whale_vs_dolphins')
 run_all_models(cetacean_type = 'only_whales')
 run_all_models(cetacean_type = 'only_dolphins')
